@@ -1,0 +1,27 @@
+name: Tests
+
+# Se ejecuta en cada pull request.
+on:
+  pull_request:
+
+# Permisos mínimos: el workflow solo necesita leer el código.
+permissions:
+  contents: read
+
+jobs:
+  unittest-2023:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      # -s: carpeta donde están los tests; -t: carpeta raíz de los imports.
+      # Con -t 2023, "from day_01.solution import ..." funciona en los tests.
+      # Solo se ejecuta 2023; los tests de 2024 se ignoran por ahora.
+      - name: Ejecutar unittests de 2023
+        run: python -m unittest discover -s 2023/tests -t 2023 -v
